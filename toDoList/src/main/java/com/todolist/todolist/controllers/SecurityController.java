@@ -54,20 +54,18 @@ public class SecurityController {
 
     @PostMapping("/signup")
         public ResponseEntity<?> signup (@RequestBody SignUpRequest signUpRequest){
-        try {
             if (userRepository.existsUserByEmail(signUpRequest.getEmail())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This email already is already in use");
             }
-        String hashed = passwordEncoder.encode(signUpRequest.getPassword());
-        User user = new User();
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(hashed);
-        user.setUsername(signUpRequest.getUsername());
-        userRepository.save(user);
-        return ResponseEntity.ok("You have successfully registered!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+            String hashed = passwordEncoder.encode(signUpRequest.getPassword());
+            User user = new User();
+            user.setEmail(signUpRequest.getEmail());
+            user.setPassword(hashed);
+            user.setUsername(signUpRequest.getUsername());
+            userRepository.save(user);
+            return ResponseEntity.ok("You have successfully registered!");
+
+
     }
 
 
