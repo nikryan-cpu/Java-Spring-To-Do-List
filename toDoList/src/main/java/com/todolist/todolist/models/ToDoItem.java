@@ -17,7 +17,7 @@ public class ToDoItem {
     private String description;
 
     @Column(name = "is_completed")
-    private boolean isCompleted;
+    private Boolean isCompleted;
 
     @Column(name = "created_at")
     private Instant createdAt;
