@@ -1,22 +1,65 @@
 <!DOCTYPE HTML>
-<link rel="stylesheet" href=" https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.2/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        body {
+            background-color: #000; /* Black background */
+            color: #ffffff; /* White text */
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            margin-top: 30px;
+            padding: 30px;
+            background: #1a1a1a; /* Dark background for the container */
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+        }
+        h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-align: center; /* Center text */
+        }
+        .btn {
+            border-radius: 25px; /* Rounded corners */
+            padding: 15px 30px; /* Larger padding for buttons */
+            transition: all 0.3s ease; /* Smooth transition */
+            font-weight: bold; /* Bold text */
+            font-size: 16px; /* Larger font size */
+        }
+        .btn-outline-success {
+            color: #28a745; /* Green text */
+            border-color: #28a745; /* Green border */
+        }
+        .btn-outline-success:hover {
+            background-color: #28a745; /* Green background on hover */
+            color: white; /* White text on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+        .form-group {
+            margin-bottom: 20px; /* Spacing between elements */
+            text-align: center; /* Center align the form group */
+        }
+        label {
+            font-weight: bold; /* Bold label */
+            color: #ffffff; /* White label */
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-    <div class="row mt-5">
-        <div class="col-2">
-            <p><a class="btn btn-outline-success" href="/">
-                <i class="bi bi-arrow-left-square-fill"></i> Back</a>
+    <div class="row">
+        <div class="col text-center">
+            <p>
+                <a class="btn btn-outline-success" href="/home">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
             </p>
-        </div>
-        <div class="col-6">
-            <h2>Add a new Todo Item</h2>
+            <h2>Add a New Todo Item</h2>
             <form action="#" th:action="@{/todo}" th:object="${toDoItem}" method="POST">
                 <div class="form-group">
                     <label for="description">Description</label>
@@ -24,19 +67,27 @@
                            type="text"
                            th:field="*{description}"
                            id="description"
-                           placeholder="Description"
-                    >
-
+                           placeholder="Enter the description"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="deadline">Deadline</label>
+                    <input class="form-control"
+                           type="text"
+                           th:field="*{deadline}"
+                           id="deadline"
+                           placeholder="Enter the deadline (YYYY-MM-DD)"
+                           required>
+                </div>
+                <div class="form-group">
                     <button type="submit" class="btn btn-outline-success">
-                        <i class="bi bi-plus-square-fill"></i> Add Todo
+                        <i class="fas fa-plus-square"></i> Add Todo
                     </button>
-
                 </div>
             </form>
         </div>
     </div>
-
 </div>
-<script th:src="@{/webjars/bootstrap/5.2.2/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
 </body>
 </html>

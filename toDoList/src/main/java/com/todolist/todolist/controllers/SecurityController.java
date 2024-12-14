@@ -1,9 +1,11 @@
 package com.todolist.todolist.controllers;
 
-import com.todolist.todolist.jwt.JwtCore;
+import com.todolist.todolist.models.ToDoItem;
 import com.todolist.todolist.models.User;
 import com.todolist.todolist.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,12 +14,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import requests.SignInRequest;
 import requests.SignUpRequest;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/auth")
@@ -28,8 +30,6 @@ public class SecurityController {
     private PasswordEncoder passwordEncoder;
 
     private AuthenticationManager authenticationManager;
-
-    private JwtCore jwtCore;
 
 
     @Autowired
@@ -43,45 +43,61 @@ public class SecurityController {
     }
 
     @Autowired
-    public void setJwtCore(JwtCore jwtCore) {
-        this.jwtCore = jwtCore;
-    }
-
-    @Autowired
     public void setAuthenticationManager(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
+    @GetMapping("/create_signup")
+    public ModelAndView createSignup(){
+        return new ModelAndView("signup");
+    }
+
     @PostMapping("/signup")
-        public ResponseEntity<?> signup (@RequestBody SignUpRequest signUpRequest){
-            if (userRepository.existsUserByEmail(signUpRequest.getEmail())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This email already is already in use");
-            }
-            String hashed = passwordEncoder.encode(signUpRequest.getPassword());
-            User user = new User();
-            user.setEmail(signUpRequest.getEmail());
-            user.setPassword(hashed);
-            user.setUsername(signUpRequest.getUsername());
-            userRepository.save(user);
-            return ResponseEntity.ok("You have successfully registered!");
-
-
+    public ResponseEntity<?> signup (String email, String username, String password){
+        SignUpRequest signUpRequest = new SignUpRequest(email, username, password);
+        System.out.println("Received signup request: " + signUpRequest);
+        if (userRepository.existsUserByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This email is already in use");
+        }
+        if(userRepository.existsUserByUsername(signUpRequest.getUsername())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This username is already in use");
+        }
+        String hashed = passwordEncoder.encode(signUpRequest.getPassword());
+        User user = new User();
+        user.setEmail(signUpRequest.getEmail());
+        user.setPassword(hashed);
+        user.setUsername(signUpRequest.getUsername());
+        userRepository.save(user);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/home");
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestBody SignInRequest signInRequest){
-        Authentication authentication = null;
-        try{
-            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    signInRequest.getUsername(), signInRequest.getPassword()));
-        }
-        catch(BadCredentialsException e){
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtCore.generateToken(authentication);
-        return ResponseEntity.ok(jwt); // Возвращает токен пользователя
+    @GetMapping("/create_signin")
+    public ModelAndView createSignin(){
+        return new ModelAndView("signin");
     }
 
+    @GetMapping("/create_wrongsignin")
+    public ModelAndView createWrongSignin(){
+        return new ModelAndView("wrongsignin");
+    }
+
+
+@PostMapping("/signin")
+public ResponseEntity<?> signin(String username, String password) throws IOException {
+    SignInRequest signInRequest = new SignInRequest(username, password);
+    Authentication authentication;
+    try {
+        authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                signInRequest.getUsername(), signInRequest.getPassword()));
+    } catch (BadCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+    }
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    System.out.println("User authenticated: " + username); // Логирование
+    return ResponseEntity.ok("User signed in successfully");
+    }
 }

@@ -35,7 +35,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     implementation group: 'org.webjars', name: 'bootstrap', version: '5.3.3'
     implementation group: 'org.webjars.npm', name: 'bootstrap-icons', version: '1.11.3'
-    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.12.6'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

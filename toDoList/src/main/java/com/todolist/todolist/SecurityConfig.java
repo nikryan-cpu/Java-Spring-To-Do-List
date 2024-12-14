@@ -1,6 +1,5 @@
 package com.todolist.todolist;
 
-import com.todolist.todolist.jwt.TokenFilter;
 import com.todolist.todolist.services.UserService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +27,8 @@ import org.springframework.web.cors.CorsConfiguration;
 public class SecurityConfig {
 
 
-    private TokenFilter tokenFilter;
     private UserService userService;
 
-    @Autowired
-    public void setTokenFilter(TokenFilter tokenFilter) {
-        this.tokenFilter = tokenFilter;
-    }
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -69,18 +63,22 @@ public class SecurityConfig {
                                         new CorsConfiguration().applyPermitDefaultValues())
                 )
                 .exceptionHandling(exceptions ->
-                        exceptions
-                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                        exceptions.authenticationEntryPoint((request, response, authException) -> {
+                            response.sendRedirect("/auth/create_signin");
+                        })
                 )
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/secured/user").fullyAuthenticated()
+                        .requestMatchers("/home").fullyAuthenticated()
+                        .requestMatchers("/create-todo").fullyAuthenticated()
+                        .requestMatchers("/todo/**").fullyAuthenticated()
                         .anyRequest().permitAll()
-                ).addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
-
+                ).formLogin(login -> login.loginPage("/auth/signin").defaultSuccessUrl("/home").failureUrl("/auth/create_wrongsignin"));
         return http.build();
     }
 

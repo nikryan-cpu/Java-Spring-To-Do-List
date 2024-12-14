@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        body {
+            background-color: #000; /* Черный фон */
+            color: #ffffff; /* Белый текст */
+            font-family: 'Arial', sans-serif;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .container {
+            margin-top: 30px;
+            padding: 30px;
+            background: #1a1a1a; /* Темный фон для контейнера */
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+            animation: slideIn 1s ease-in-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .table {
+            margin-top: 20px;
+            color: #ffffff;
+        }
+        .table th {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            padding: 15px;
+        }
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 12px;
+        }
+        .btn {
+            border-radius: 25px; /* Закругленные углы */
+            padding: 10px 20px; /* Отступы для кнопок */
+            transition: all 0.3s ease; /* Плавный переход */
+            font-weight: bold; /* Жирный текст */
+        }
+        .btn-info {
+            background-color: #17a2b8;
+            border: none;
+            color: white; /* Белый текст */
+            text-decoration: none; /* Убрать подчеркивание */
+        }
+        .btn-info:hover {
+            background-color: #138496;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень при наведении */
+            transform: scale(1.05); /* Легкое увеличение */
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+            color: white; /* Белый текст */
+            text-decoration: none; /* Убрать подчеркивание */
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05); /* Легкое увеличение */
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .create-btn {
+            margin-top: 20px;
+            border-radius: 25px; /* Закругленные углы */
+            padding: 10px 20px; /* Отступы для кнопки */
+            font-weight: bold; /* Жирный текст */
+            background-color: #28a745; /* Зеленый фон */
+            border: none; /* Без границы */
+            transition: all 0.3s ease; /* Плавный переход */
+            color: #ffffff; /* Белый текст */
+            text-decoration: none; /* Убрать подчеркивание */
+        }
+        .create-btn:hover {
+            background-color: #ffffff; /* Изменить на белый при наведении */
+            color: #28a745; /* Изменить текст на зеленый при наведении */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень при наведении */
+        }
+
+        /* Flexbox для кнопок */
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap; /* Разрешить перенос */
+            gap: 10px; /* Пробел между кнопками */
+            justify-content: center;
+        }
+
+        /* Медиа-запрос для меньших экранов */
+        @media (max-width: 576px) {
+            .action-buttons {
+                flex-direction: column; /* Вертикальное расположение кнопок */
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>ToDo Application</h1>
+    <hr />
+
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Actions</th>
+            <th>Description</th>
+            <th>Is Complete</th>
+            <th>Created At</th> <!-- Поменяно местами -->
+            <th>Deadline</th> <!-- Поменяно местами -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${toDoItems}" th:class="${item.isCompleted} ? 'alert alert-success' : 'alert alert-danger'">
+            <td>
+                <div class="action-buttons">
+                    <a class="btn btn-info" th:href="@{/edit/{id}(id=${item.id})}">
+                        <i class="fas fa-pencil-alt"></i> Edit</a>
+                    <a class="btn btn-danger" th:href="@{/delete/{id}(id=${item.id})}">
+                        <i class="fas fa-trash"></i> Delete</a>
+                </div>
+            </td>
+            <td th:text="${item.description}"></td>
+            <td>
+                <span th:if="${item.isCompleted}" th:text="'Yes'"></span>
+                <span th:unless="${item.isCompleted}" th:text="'No'"></span>
+            </td>
+            <td th:text="${#dates.format(item.createdAt, 'dd MMMM yyyy')}"></td> <!-- Убрано время -->
+            <td th:text="${item.deadline != null ? item.deadline : 'No deadline'}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <a class="btn create-btn" href="/create-todo">
+            <i class="fas fa-plus-square"></i> Create a Todo</a>
+    </div>
+</div>
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+</body>
+</html>

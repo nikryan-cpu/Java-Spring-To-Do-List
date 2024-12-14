@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -22,6 +23,10 @@ public class ToDoItem {
     @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+    @Column(name = "deadline")
+    private String deadline;
+
+    @Column(name = "user_id")
+    private Long userId;
+
 }

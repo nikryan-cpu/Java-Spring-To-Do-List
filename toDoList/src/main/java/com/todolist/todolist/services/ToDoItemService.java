@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,11 +27,14 @@ public class ToDoItemService {
         return toDoItemRepository.findById(id);
     }
 
+    public List<ToDoItem> getToDoItemsByUserId(Long userId) {
+        return toDoItemRepository.findByUserId(userId);
+    }
+
     public ToDoItem save(ToDoItem toDoItem) {
         if(toDoItem.getId() == null) {
             toDoItem.setCreatedAt(Instant.now());
         }
-        toDoItem.setUpdatedAt(Instant.now());
         return toDoItemRepository.save(toDoItem);
     }
 
