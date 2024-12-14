@@ -77,7 +77,7 @@ public class CreateToDoItemController {
     public ResponseEntity<?> deleteTodoItem(@PathVariable("id") Long id, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        if(!Objects.equals(userRepository.findByUsername(username).orElseThrow().getId(), toDoItemService.getToDoItemById(id).orElseThrow().getUserId())) {
+        if(!Objects.equals(userRepository.findByEmail(username).orElseThrow().getId(), toDoItemService.getToDoItemById(id).orElseThrow().getUserId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You can't delete this item");
         }
         ToDoItem todoItem = toDoItemService

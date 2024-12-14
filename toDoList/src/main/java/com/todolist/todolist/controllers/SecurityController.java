@@ -19,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import requests.SignInRequest;
 import requests.SignUpRequest;
 
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/auth")
@@ -56,11 +55,15 @@ public class SecurityController {
     public ResponseEntity<?> signup (String email, String username, String password){
         SignUpRequest signUpRequest = new SignUpRequest(email, username, password);
         System.out.println("Received signup request: " + signUpRequest);
-        if (userRepository.existsUserByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This email is already in use");
-        }
         if(userRepository.existsUserByUsername(signUpRequest.getUsername())){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This username is already in use");
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", "/auth/create_wrong_signup_username"); // Укажите целевой URL
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        }
+        if (userRepository.existsUserByEmail(signUpRequest.getEmail())) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", "/auth/create_wrong_signup_email"); // Укажите целевой URL
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);
         }
         String hashed = passwordEncoder.encode(signUpRequest.getPassword());
         User user = new User();
@@ -84,16 +87,27 @@ public class SecurityController {
         return new ModelAndView("wrongsignin");
     }
 
+    @GetMapping("/create_wrong_signup_email")
+    public ModelAndView createWrongSignupEmail(){
+        return new ModelAndView("wrong_signup_email");
+    }
+
+    @GetMapping("/create_wrong_signup_username")
+    public ModelAndView createWrongSignupUsername(){
+        return new ModelAndView("wrong_signup_username");
+    }
 
 @PostMapping("/signin")
-public ResponseEntity<?> signin(String username, String password) throws IOException {
+public ResponseEntity<?> signin(String username, String password) {
     SignInRequest signInRequest = new SignInRequest(username, password);
     Authentication authentication;
     try {
         authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 signInRequest.getUsername(), signInRequest.getPassword()));
     } catch (BadCredentialsException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/auth/create_wrongsignin"); // Укажите целевой URL
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
     SecurityContextHolder.getContext().setAuthentication(authentication);

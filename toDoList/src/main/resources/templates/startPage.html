@@ -4,18 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
+        /* Глобальные стили */
+        :root {
+            --primary-color: #1e1e1e;
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --secondary-color: #007bff;
+            --light-button-color: #000000; /* Цвет кнопок в светлом режиме */
+        }
+        .light-mode {
+            --primary-color: #ffffff;
+            --background-color: #f0f2f5;
+            --text-color: #212529;
+            --secondary-color: #007bff;
+        }
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            background-color: var(--background-color);
+            color: var(--text-color);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden;
             padding: 20px; /* Добавлено для мобильных устройств */
         }
         h1 {
@@ -31,7 +45,7 @@
             animation: slideIn 1s ease-in-out;
         }
         .box {
-            background-color: #1e1e1e;
+            background-color: var(--primary-color);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -44,20 +58,51 @@
         .box:hover {
             transform: translateY(-5px); /* Эффект при наведении */
         }
+        input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
         button {
-            padding: 15px 30px;
-            background-color: #007bff;
+            width: 100%;
+            padding: 10px;
+            background-color: var(--secondary-color);
             color: white;
             border: none;
             border-radius: 4px;
-            font-size: 1.2rem; /* Используем rem для масштабируемости */
             cursor: pointer;
+            font-size: 16px;
             transition: background-color 0.3s ease;
-            margin-top: 20px;
-            animation: fadeIn 1s ease-in-out;
         }
         button:hover {
             background-color: #0056b3;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .toggle-dark-mode {
+            position: fixed; /* Change to fixed for full width */
+            top: 10px; /* Adjust as needed */
+            right: 0; /* Align to the right edge */
+            background-color: var(--primary-color);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            z-index: 10; /* Ensure it stays above other elements */
+            margin: 0; /* Remove margin */
+        }
+        .toggle-dark-mode i {
+            font-size: 1.2rem;
         }
 
         /* Animations */
@@ -82,13 +127,50 @@
             .box {
                 width: 90%; /* Ширина блоков на мобильных устройствах */
             }
-            button {
-                width: 100%; /* Кнопка занимает всю ширину */
+        }
+
+        /* Новые стили для кнопок */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px; /* Увеличенный отступ для кнопок */
+            gap: 15px; /* Добавлено для промежутка между кнопками */
+        }
+
+        .button-container button {
+            width: 120px; /* Фиксированная ширина для кнопок */
+            padding: 12px; /* Увеличенный отступ для кнопок */
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Добавлено для эффекта при наведении */
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05); /* Увеличиваем кнопку при наведении */
+        }
+
+        /* Светлый режим для кнопок */
+        .light-mode .button-container button {
+            background-color: var(--light-button-color); /* Цвет кнопок в светлом режиме */
+            color: white; /* Цвет текста на кнопках в светлом режиме */
+        }
+
+        @media (max-width: 600px) {
+            .button-container button {
+                width: 100%; /* Кнопки занимают 100% ширины на мобильных устройствах */
             }
         }
     </style>
 </head>
-<body>
+<body class="dark-mode">
+<button class="toggle-dark-mode" onclick="toggleDarkMode()">
+    <i class="fas fa-sun" id="dark-mode-icon"></i>
+</button>
 <h1>Welcome to Todo List App</h1>
 <div class="description">
     <div class="box">
@@ -104,6 +186,22 @@
         <p>Feel the satisfaction of completing your tasks!</p>
     </div>
 </div>
-<button onclick="window.location.href='/auth/create_signin'">Get Started</button>
+<div class="button-container">
+    <button onclick="window.location.href='/auth/create_signin'">Get Started</button>
+    <button onclick="window.location.href='/more-info'">Learn More</button>
+    <button onclick="window.location.href='/contact'">Contact Us</button> <!-- Новая кнопка -->
+</div>
+
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('light-mode');
+        document.querySelectorAll('.box').forEach(box => box.classList.toggle('light-mode'));
+        document.querySelector('h1').classList.toggle('light-mode');
+        document.querySelectorAll('button').forEach(btn => btn.classList.toggle('light-mode'));
+        const icon = document.getElementById('dark-mode-icon');
+        icon.classList.toggle('fa-sun');
+        icon.classList.toggle('fa-moon');
+    }
+</script>
 </body>
 </html>

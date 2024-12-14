@@ -3,122 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In</title>
+    <title>Sign Up</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* Global styles */
-        :root {
-            --primary-color: #1e1e1e;
-            --background-color: #121212;
-            --text-color: #ffffff;
-            --secondary-color: #007bff;
-        }
-        .light-mode {
-            --primary-color: #ffffff;
-            --background-color: #f0f2f5;
-            --text-color: #212529;
-        }
         body {
             font-family: 'Arial', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
+            background-color: #121212;
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            position: relative;
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
         }
+
         .container {
-            background-color: var(--primary-color);
+            background-color: #1e1e1e;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             width: 300px;
-            animation: fadeIn 1s ease-in-out;
-            display: flex;
-            flex-direction: column; /* Arrange children in a column */
-            align-items: center; /* Center align items */
-            text-align: center; /* Center text */
+            text-align: center;
+            position: relative;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+
         h2 {
             margin-bottom: 20px;
-            font-size: 2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: color 0.3s ease;
+            font-size: 24px;
         }
+
         label {
             margin-bottom: 5px;
+            display: block;
             font-size: 14px;
-            text-align: left; /* Align text to the left */
-            width: 100%; /* Full width for label */
+            text-align: left;
         }
+
         input[type="text"],
+        input[type="email"],
         input[type="password"] {
-            width: calc(100% - 20px); /* Full width minus padding */
+            width: calc(100% - 20px);
             padding: 10px;
             margin: 5px 0 15px 0;
             border: 1px solid #333;
             border-radius: 4px;
-            background-color: var(--primary-color);
-            color: var(--text-color);
-            box-sizing: border-box; /* Include padding in width */
+            background-color: #2c2c2c;
+            color: #ffffff;
+            box-sizing: border-box;
+            transition: border-color 0.3s, background-color 0.3s;
         }
+
         input:focus {
-            border-color: var(--secondary-color);
+            border-color: #007bff;
+            background-color: #3a3a3a;
             outline: none;
         }
+
         button {
             width: 100%;
             padding: 10px;
-            background-color: var(--secondary-color);
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s;
         }
+
         button:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
         }
+
         .footer {
             margin-top: 15px;
             font-size: 14px;
-            text-align: center; /* Center align footer text */
         }
+
         .footer a {
-            color: var(--secondary-color);
+            color: #007bff;
             text-decoration: none;
+            transition: color 0.3s;
         }
+
         .footer a:hover {
             text-decoration: underline;
+            color: #0056b3;
         }
-        .toggle-dark-mode {
-            position: fixed;
-            top: 10px;
-            right: 0;
-            background-color: var(--primary-color);
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            z-index: 10;
-            margin: 0; /* Убираем отступы */
-        }
-        .toggle-dark-mode i {
-            font-size: 1.2rem;
-        }
+
         .error-message {
             color: red;
             margin-top: 10px;
             font-size: 14px;
-            text-align: center; /* Center align error message */
+        }
+
+        .toggle-dark-mode {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .toggle-dark-mode i {
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+
+        /* Light mode styles */
+        body.light-mode {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .container.light-mode {
+            background-color: #f0f0f0;
+        }
+
+        input.light-mode {
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #ccc;
+        }
+
+        button.light-mode {
+            background-color: #007bff;
+            color: white;
+        }
+
+        button.light-mode:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -130,30 +147,36 @@
     function toggleDarkMode() {
         document.body.classList.toggle('light-mode');
         document.querySelector('.container').classList.toggle('light-mode');
-        document.querySelector('h2').classList.toggle('light-mode');
         document.querySelectorAll('input').forEach(input => input.classList.toggle('light-mode'));
         document.querySelector('button').classList.toggle('light-mode');
-        document.querySelector('#dark-mode-icon').classList.toggle('fa-moon');
+
+        // Change icon based on the theme
+        const icon = document.getElementById('dark-mode-icon');
+        icon.classList.toggle('fa-sun');
+        icon.classList.toggle('fa-moon');
     }
 </script>
 <div class="container">
-    <h2>Sign In</h2>
-    <form action="/auth/signin" method="post">
+    <h2>Sign Up</h2>
+    <form action="/auth/signup" method="post">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
 
-        <button type="submit">Sign In</button>
+        <button type="submit">Sign Up</button>
     </form>
     <div class="error-message">
         <c:if test="${not empty param.error}">
-            <p>Invalid username or password. Please try again.</p>
+            <p>This username already exists!</p>
         </c:if>
     </div>
     <div class="footer">
-        <p>Don't have an account? <a href="/auth/create_signup">Sign Up</a></p>
+        <p>Already have an account? <a href="/auth/create_signin">Sign In</a></p>
     </div>
 </div>
 </body>

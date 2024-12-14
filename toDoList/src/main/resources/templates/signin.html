@@ -1,55 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
+        /* Глобальные стили */
+        :root {
+            --primary-color: #1e1e1e;
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --secondary-color: #007bff;
+        }
+        .light-mode {
+            --primary-color: #ffffff;
+            --background-color: #f0f2f5;
+            --text-color: #212529;
+        }
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            background-color: var(--background-color);
+            color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            margin: 0; /* Remove default margin */
+            position: relative; /* Position relative for absolute elements */
         }
         .container {
-            background-color: #1e1e1e;
+            background-color: var(--primary-color);
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             width: 300px;
+            animation: fadeIn 1s ease-in-out;
+            display: flex;
+            flex-direction: column; /* Arrange children in a column */
+            align-items: center; /* Center align items */
+            text-align: center; /* Center text */
         }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Заголовок */
         h2 {
-            text-align: center;
             margin-bottom: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
         }
+
+        /* Формы и кнопки */
         label {
             margin-bottom: 5px;
-            display: block;
             font-size: 14px;
-            text-align: center; /* Center the label text */
+            width: 100%; /* Full width for label */
+            text-align: left; /* Align text to the left */
         }
         input[type="text"],
         input[type="password"] {
-            width: 100%;
+            width: calc(100% - 20px); /* Full width minus padding */
             padding: 10px;
             margin: 5px 0 15px 0;
             border: 1px solid #333;
             border-radius: 4px;
-            background-color: #2c2c2c;
-            color: #ffffff;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            box-sizing: border-box; /* Include padding in width */
         }
         input:focus {
-            border-color: #007bff;
+            border-color: var(--secondary-color);
             outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
         button {
             width: 100%;
             padding: 10px;
-            background-color: #007bff;
+            background-color: var(--secondary-color);
             color: white;
             border: none;
             border-radius: 4px;
@@ -66,15 +98,43 @@
             font-size: 14px;
         }
         .footer a {
-            color: #007bff;
+            color: var(--secondary-color);
             text-decoration: none;
         }
         .footer a:hover {
             text-decoration: underline;
         }
+        .toggle-dark-mode {
+            position: fixed; /* Change to fixed for full width */
+            top: 10px; /* Adjust as needed */
+            right: 0; /* Align to the right edge */
+            background-color: var(--primary-color);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            z-index: 10; /* Ensure it stays above other elements */
+            margin: 0; /* Remove margin */
+        }
+        .toggle-dark-mode i {
+            font-size: 1.2rem;
+        }
     </style>
 </head>
-<body>
+<body class="dark-mode">
+<button class="toggle-dark-mode" onclick="toggleDarkMode()">
+    <i class="fas fa-sun" id="dark-mode-icon"></i>
+</button>
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('light-mode');
+        document.querySelector('.container').classList.toggle('light-mode');
+        document.querySelector('h2').classList.toggle('light-mode');
+        document.querySelectorAll('input').forEach(input => input.classList.toggle('light-mode'));
+        document.querySelector('button').classList.toggle('light-mode');
+        document.querySelector('#dark-mode-icon').classList.toggle('fa-moon');
+    }
+</script>
 <div class="container">
     <h2>Sign In</h2>
     <form action="/auth/signin" method="post">

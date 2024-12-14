@@ -7,130 +7,286 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
+        /* Глобальные стили */
         body {
-            background-color: #000; /* Черный фон */
-            color: #ffffff; /* Белый текст */
-            font-family: 'Arial', sans-serif;
-            animation: fadeIn 1s ease-in-out;
+            font-family: 'Inter', sans-serif;
+            background-color: #407de8; /* Светло-серый фон */
+            transition: background-color 0.3s ease;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        body.dark-mode {
+            background-color: #2f3437; /* Темный фон для ночного режима */
         }
         .container {
-            margin-top: 30px;
+            max-width: 800px;
+            margin: 100px auto;
             padding: 30px;
-            background: #1a1a1a; /* Темный фон для контейнера */
+            background: #ffffff; /* Белый фон для контейнера */
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
-            animation: slideIn 1s ease-in-out;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.8s ease-in-out;
+        }
+        .container.dark-mode {
+            background: #3b4145; /* Темный фон контейнера для ночного режима */
+            color: #ffffff;
         }
         @keyframes slideIn {
             from { transform: translateY(-20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+
+        /* Заголовок */
         h1 {
             margin-bottom: 20px;
-            color: #ffffff;
+            color: #212529;
             text-align: center;
             font-size: 2.5rem;
             font-weight: bold;
             text-transform: uppercase;
+            transition: color 0.3s ease;
         }
+        h1.dark-mode {
+            color: #ffffff;
+        }
+
+
+
+        /* Поле поиска */
+        .search-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-input {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 25px;
+            border: 2px solid #007bff; /* Увеличенная толщина рамки */
+            transition: all 0.3s ease;
+            padding: 10px 15px;
+        }
+        .search-input:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Таблица */
         .table {
             margin-top: 20px;
-            color: #ffffff;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+            padding: 15px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
         }
         .table th {
             background-color: #007bff;
             color: white;
-            text-align: center;
             font-weight: bold;
-            padding: 15px;
+        }
+        .table th.dark-mode {
+            background-color: #138496;
         }
         .table td {
-            vertical-align: middle;
-            text-align: center;
-            padding: 12px;
+            background-color: #f7f7f7;
+            border-bottom: 1px solid #ddd;
         }
+        .table td.dark-mode {
+            background-color: #44484a;
+            border-bottom: 1px solid #555;
+        }
+        .alert-success {
+            background-color: #cff6cf;
+        }
+        .alert-success.dark-mode {
+            background-color: #2ecc71;
+            color: #ffffff;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+        }
+        .alert-danger.dark-mode {
+            background-color: #e74c3c;
+            color: #ffffff;
+        }
+
+        /* Кнопки */
         .btn {
-            border-radius: 25px; /* Закругленные углы */
-            padding: 10px 20px; /* Отступы для кнопок */
-            transition: all 0.3s ease; /* Плавный переход */
-            font-weight: bold; /* Жирный текст */
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            font-weight: bold;
         }
         .btn-info {
             background-color: #17a2b8;
             border: none;
-            color: white; /* Белый текст */
-            text-decoration: none; /* Убрать подчеркивание */
+            color: white;
+            text-decoration: none;
         }
         .btn-info:hover {
             background-color: #138496;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень при наведении */
-            transform: scale(1.05); /* Легкое увеличение */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
+        }
+        .btn-info.dark-mode {
+            background-color: #138496;
+        }
+        .btn-info.dark-mode:hover {
+            background-color: #0f6784;
         }
         .btn-danger {
             background-color: #dc3545;
             border: none;
-            color: white; /* Белый текст */
-            text-decoration: none; /* Убрать подчеркивание */
+            color: white;
+            text-decoration: none;
         }
         .btn-danger:hover {
             background-color: #c82333;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transform: scale(1.05); /* Легкое увеличение */
+            transform: scale(1.05);
         }
-        .footer {
-            margin-top: 20px;
-            text-align: center;
+        .btn-danger.dark-mode {
+            background-color: #e74c3c;
+        }
+        .btn-danger.dark-mode:hover {
+            background-color: #c0392b;
         }
         .create-btn {
             margin-top: 20px;
-            border-radius: 25px; /* Закругленные углы */
-            padding: 10px 20px; /* Отступы для кнопки */
-            font-weight: bold; /* Жирный текст */
-            background-color: #28a745; /* Зеленый фон */
-            border: none; /* Без границы */
-            transition: all 0.3s ease; /* Плавный переход */
-            color: #ffffff; /* Белый текст */
-            text-decoration: none; /* Убрать подчеркивание */
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-weight: bold;
+            background-color: #28a745;
+            border: none;
+            transition: all 0.3s ease;
+            color: #ffffff;
+            text-decoration: none;
         }
         .create-btn:hover {
-            background-color: #ffffff; /* Изменить на белый при наведении */
-            color: #28a745; /* Изменить текст на зеленый при наведении */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Тень при наведении */
+            background-color: #ffffff;
+            color: #28a745;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .create-btn.dark-mode {
+            background-color: #2ecc71;
+        }
+        .create-btn.dark-mode:hover {
+            background-color: #ffffff;
+            color: #2ecc71;
         }
 
         /* Flexbox для кнопок */
         .action-buttons {
             display: flex;
-            flex-wrap: wrap; /* Разрешить перенос */
-            gap: 10px; /* Пробел между кнопками */
+            flex-wrap: wrap;
+            gap: 10px;
             justify-content: center;
+        }
+        input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        /* Ночной режим */
+        .toggle-dark-mode {
+            position: fixed; /* Change to fixed for full width */
+            top: 10px; /* Adjust as needed */
+            right: 0; /* Align to the right edge */
+            background-color: var(--primary-color);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            z-index: 10; /* Ensure it stays above other elements */
+            margin: 0; /* Remove margin */
+        }
+        .toggle-dark-mode i {
+            font-size: 1.2rem;
         }
 
         /* Медиа-запрос для меньших экранов */
         @media (max-width: 576px) {
             .action-buttons {
-                flex-direction: column; /* Вертикальное расположение кнопок */
+                flex-direction: column;
+            }
+            .toggle-dark-mode {
+                top: 10px;
+                right: 10px;
             }
         }
     </style>
 </head>
-<body>
+<body class="dark-mode"> <!-- Start with dark mode -->
+<button class="toggle-dark-mode" onclick="toggleDarkMode()">
+    <i class="fas fa-sun" id="dark-mode-icon"></i>
+</button>
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        document.querySelector('.container').classList.toggle('dark-mode');
+        document.querySelector('h1').classList.toggle('dark-mode');
+        document.querySelectorAll('.table th').forEach(th => th.classList.toggle('dark-mode'));
+        document.querySelectorAll('.table td').forEach(td => td.classList.toggle('dark-mode'));
+        document.querySelectorAll('.alert-success').forEach(alert => alert.classList.toggle('dark-mode'));
+        document.querySelectorAll('.alert-danger').forEach(alert => alert.classList.toggle('dark-mode'));
+        document.querySelectorAll('.btn-info').forEach(btn => btn.classList.toggle('dark-mode'));
+        document.querySelectorAll('.btn-danger').forEach(btn => btn.classList.toggle('dark-mode'));
+        document.querySelector('.create-btn').classList.toggle('dark-mode');
+        document.querySelector('.toggle-dark-mode').classList.toggle('dark-mode');
+
+        // Change icon based on dark mode status
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        const icon = document.getElementById('dark-mode-icon');
+        icon.classList.toggle('fa-sun', isDarkMode);
+        icon.classList.toggle('fa-moon', !isDarkMode);
+    }
+</script>
+
 <div class="container">
     <h1>ToDo Application</h1>
     <hr />
 
-    <table class="table table-bordered table-striped">
+    <!-- Search Field -->
+    <div class="search-container">
+        <input type="text" class="form-control search-input" placeholder="Search by Description" id="searchInput" onkeyup="filterTable()">
+    </div>
+
+    <table class="table table-bordered table-striped" id="todoTable">
         <thead>
         <tr>
             <th>Actions</th>
             <th>Description</th>
             <th>Is Complete</th>
-            <th>Created At</th> <!-- Поменяно местами -->
-            <th>Deadline</th> <!-- Поменяно местами -->
+            <th>Created At</th>
+            <th>Deadline</th>
         </tr>
         </thead>
         <tbody>
@@ -148,17 +304,34 @@
                 <span th:if="${item.isCompleted}" th:text="'Yes'"></span>
                 <span th:unless="${item.isCompleted}" th:text="'No'"></span>
             </td>
-            <td th:text="${#dates.format(item.createdAt, 'dd MMMM yyyy')}"></td> <!-- Убрано время -->
+            <td th:text="${#dates.format(item.createdAt, 'dd MMMM yyyy')}"></td>
             <td th:text="${item.deadline != null ? item.deadline : 'No deadline'}"></td>
         </tr>
         </tbody>
     </table>
-
-    <div class="footer">
+    <div class="footer" style="margin-top: 30px;">
         <a class="btn create-btn" href="/create-todo">
             <i class="fas fa-plus-square"></i> Create a Todo</a>
     </div>
 </div>
+
+<script>
+    function filterTable() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById('todoTable');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+            const td = tr[i].getElementsByTagName('td')[1]; // Description column
+            if (td) {
+                const txtValue = td.textContent || td.innerText;
+                tr[i].style.display = txtValue.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+            }
+        }
+    }
+</script>
+
 <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
 </body>
 </html>
