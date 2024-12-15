@@ -1,93 +1,176 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
+        :root {
+            --primary-color: #1e1e1e;
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --secondary-color: rgba(230, 42, 244, 0.47);
+            --success-color: rgba(230, 42, 244, 0.47); /* Green color for buttons */
+            --error-color: #6c757d; /* Gray color for button on error */
+        }
         body {
-            background-color: #000; /* Black background */
-            color: #ffffff; /* White text */
+            background-color: var(--background-color);
+            color: var(--text-color);
             font-family: 'Arial', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+        .btn-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: 25px;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn-back:hover {
+            background-color: #212a88;
+            transform: scale(1.05);
         }
         .container {
-            margin-top: 30px;
+            background-color: var(--primary-color);
             padding: 30px;
-            background: #1a1a1a; /* Dark background for the container */
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 251, 4, 0.5);
+            width: 400px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         h2 {
-            color: #ffffff;
+            color: var(--text-color);
             margin-bottom: 20px;
-            text-align: center; /* Center text */
-        }
-        .btn {
-            border-radius: 25px; /* Rounded corners */
-            padding: 15px 30px; /* Larger padding for buttons */
-            transition: all 0.3s ease; /* Smooth transition */
-            font-weight: bold; /* Bold text */
-            font-size: 16px; /* Larger font size */
-        }
-        .btn-outline-success {
-            color: #28a745; /* Green text */
-            border-color: #28a745; /* Green border */
-        }
-        .btn-outline-success:hover {
-            background-color: #28a745; /* Green background on hover */
-            color: white; /* White text on hover */
-            transform: scale(1.05); /* Slightly enlarge on hover */
+            text-align: center;
         }
         .form-group {
-            margin-bottom: 20px; /* Spacing between elements */
-            text-align: center; /* Center align the form group */
+            margin-bottom: 20px;
+            text-align: center;
         }
         label {
-            font-weight: bold; /* Bold label */
-            color: #ffffff; /* White label */
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        input[type="text"],
+        input[type="date"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 5px rgb(33, 136, 56);
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button.disabled {
+            background-color: var(--error-color); /* Gray color on error */
+            cursor: not-allowed; /* Show not-allowed cursor */
+        }
+        button:hover:not(.disabled) {
+            background-color: #212a88; /* Darker green on hover */
+        }
+        .error-message {
+            position: fixed;
+            top: 30px;
+            right: 10px;
+            background-color: #ff3333;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            font-size: 14px;
+            font-weight: bold;
+            display: none;
         }
     </style>
 </head>
 <body>
+<a class="btn-back" href="/home">
+    <i class="fas fa-arrow-left"></i> Back
+</a>
 <div class="container">
-    <div class="row">
-        <div class="col text-center">
-            <p>
-                <a class="btn btn-outline-success" href="/home">
-                    <i class="fas fa-arrow-left"></i> Back
-                </a>
-            </p>
-            <h2>Add a New Todo Item</h2>
-            <form action="#" th:action="@{/todo}" th:object="${toDoItem}" method="POST">
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <input class="form-control"
-                           type="text"
-                           th:field="*{description}"
-                           id="description"
-                           placeholder="Enter the description"
-                           required>
-                </div>
-                <div class="form-group">
-                    <label for="deadline">Deadline</label>
-                    <input class="form-control"
-                           type="text"
-                           th:field="*{deadline}"
-                           id="deadline"
-                           placeholder="Enter the deadline (YYYY-MM-DD)"
-                           required>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-outline-success">
-                        <i class="fas fa-plus-square"></i> Add Todo
-                    </button>
-                </div>
-            </form>
+    <h2>Add a New Todo Item</h2>
+    <form action="#" th:action="@{/todo}" th:object="${toDoItem}" method="POST">
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input class="form-control"
+                   type="text"
+                   th:field="*{description}"
+                   id="description"
+                   placeholder="Enter the description"
+                   required>
         </div>
-    </div>
+        <div class="form-group">
+            <label for="deadline">Deadline</label>
+            <input class="form-control"
+                   type="date"
+                   th:field="*{deadline}"
+                   id="deadline"
+                   required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn" id="addTodoButton">
+                <i class="fas fa-plus-square"></i> Add Todo
+            </button>
+        </div>
+    </form>
 </div>
-<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+
+<!-- Error Message -->
+<div class="error-message" id="deadlineError">
+    Deadline could not be in the past!
+</div>
+
+<script>
+    const deadlineInput = document.getElementById('deadline');
+    const submitButton = document.getElementById('addTodoButton');
+    const deadlineError = document.getElementById('deadlineError');
+
+    deadlineInput.addEventListener('input', function() {
+        const deadlineDate = new Date(this.value);
+        const now = new Date();
+
+        if (deadlineDate < now) {
+            submitButton.disabled = true; // Disable button
+            submitButton.classList.add('disabled'); // Add disabled class
+            deadlineError.style.display = 'block'; // Show error message
+        } else {
+            submitButton.disabled = false; // Enable button
+            submitButton.classList.remove('disabled'); // Remove disabled class
+            deadlineError.style.display = 'none'; // Hide error message
+        }
+    });
+</script>
 </body>
 </html>

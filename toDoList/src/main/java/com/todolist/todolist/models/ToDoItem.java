@@ -23,8 +23,8 @@ public class ToDoItem {
     @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(name = "deadline")
-    private String deadline;
+    @Column(name = "deadline", columnDefinition = "DATE")
+    private LocalDate deadline;
 
     @Column(name = "user_id")
     private Long userId;

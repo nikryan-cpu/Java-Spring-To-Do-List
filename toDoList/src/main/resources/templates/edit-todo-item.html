@@ -1,114 +1,179 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Todo Item</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
+    /* Глобальные стили */
+    :root {
+      --primary-color: #1e1e1e;
+      --background-color: #121212;
+      --text-color: #ffffff;
+      --secondary-color: rgba(230, 42, 244, 0.47);
+      --success-color: rgba(230, 42, 244, 0.47); /* Green color for buttons */
+      --error-color: #6c757d; /* Gray color for button on error */
+    }
     body {
-      background-color: #000; /* Черный фон */
-      color: #ffffff; /* Белый текст */
       font-family: 'Arial', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      position: relative; /* For positioning the back button */
+    }
+    .btn-back {
+      position: absolute; /* Position in the upper left corner */
+      top: 20px; /* Space from the top */
+      left: 20px; /* Space from the left */
+      background-color: var(--success-color);
+      color: white;
+      border-radius: 25px;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth background and scale transition */
+    }
+    .btn-back:hover {
+      background-color: #212a88;
+      transform: scale(1.05);
     }
     .container {
-      margin-top: 30px;
+      background-color: var(--primary-color);
       padding: 30px;
-      background: #1a1a1a; /* Темный фон для контейнера */
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(251, 0, 238, 0.5);
+      width: 400px; /* Adjusted width for better layout */
+      animation: fadeIn 1s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Заголовок */
     h2 {
-      color: #ffffff;
       margin-bottom: 20px;
-      text-align: center; /* Центрирование заголовка */
+      font-size: 2rem;
+      font-weight: bold;
+      text-transform: uppercase;
     }
-    .btn {
-      border-radius: 25px; /* Закругленные углы */
-      padding: 10px 20px; /* Отступы для кнопок */
-      transition: all 0.3s ease; /* Плавный переход */
-      font-weight: bold; /* Жирный текст */
-    }
-    .btn-outline-success {
-      color: #28a745; /* Зеленый текст */
-      border-color: #28a745; /* Зеленая граница */
-    }
-    .btn-outline-success:hover {
-      background-color: #28a745; /* Зеленый фон при наведении */
-      color: white; /* Белый текст при наведении */
-    }
-    .form-group {
-      margin-bottom: 30px; /* Увеличенные отступы между элементами */
-    }
+
+    /* Формы и кнопки */
     label {
-      font-weight: bold; /* Жирный текст для меток */
-      color: #ffffff; /* Белый цвет для меток */
+      margin-bottom: 5px;
+      font-size: 14px;
+      width: 100%;
+      text-align: left;
     }
-    .form-control {
-      background-color: #2a2a2a; /* Темный фон для полей ввода */
-      border: 1px solid #444; /* Темная граница */
-      color: #ffffff; /* Белый цвет текста */
-      border-radius: 10px; /* Закругленные углы для полей ввода */
+    input[type="text"],
+    input[type="date"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin: 5px 0 15px 0;
+      border: 1px solid #333;
+      border-radius: 4px;
+      background-color: var(--primary-color);
+      color: var(--text-color);
+      box-sizing: border-box;
     }
-    .form-control:focus {
-      background-color: #2a2a2a; /* Темный фон при фокусе */
-      border-color: #28a745; /* Зеленая граница при фокусе */
-      box-shadow: 0 0 5px rgba(40, 167, 69, 0.5); /* Тень при фокусе */
+    input:focus {
+      border-color: var(--secondary-color);
+      outline: none;
+      box-shadow: 0 0 5px rgba(191, 57, 244, 0.5);
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: var(--secondary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+      margin-top: 20px; /* Margin to space from the fields */
+    }
+    button.disabled {
+      background-color: var(--error-color); /* Gray color on error */
+      cursor: not-allowed; /* Show not-allowed cursor */
+    }
+    button:hover:not(.disabled) {
+      background-color: #212a88; /* Darker color on hover */
+    }
+    .error-message {
+      position: fixed;
+      top: 30px;
+      right: 10px;
+      background-color: #ff3333;
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+      font-size: 14px;
+      font-weight: bold;
+      display: none;
     }
   </style>
 </head>
 <body>
+<a class="btn-back" href="/home">
+  <i class="fas fa-arrow-left"></i> Back
+</a>
 <div class="container">
-  <div class="row mt-5 justify-content-center"> <!-- Центрирование всех элементов -->
-    <div class="col-md-8"> <!-- Увеличена ширина колонки для лучшего выравнивания -->
-      <h2>Edit Todo Item</h2>
-      <form class="row g-3" action="#" th:action="@{/todo/{id}(id=${toDoItem.id})}" th:object="${toDoItem}" method="POST">
-        <div class="form-group">
-          <div class="col-12">
-            <label for="description">Description</label>
-            <input class="form-control"
-                   type="text"
-                   th:field="*{description}"
-                   id="description"
-                   placeholder="Enter the description"
-                   required>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-12">
-            <label for="deadline">Deadline</label>
-            <input class="form-control"
-                   type="text"
-                   th:field="*{deadline}"
-                   id="deadline"
-                   placeholder="Enter the deadline (e.g., 2024-12-31)"
-                   required>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-12 form-check">
-            <input class="form-check-input"
-                   type="checkbox"
-                   id="inputIsComplete"
-                   th:field="*{isCompleted}">
-            <label class="form-check-label" for="inputIsComplete">
-              Completed?
-            </label>
-          </div>
-        </div>
-
-        <input type="hidden" th:field="*{createdAt}" />
-
-        <div class="form-group text-center"> <!-- Центрирование кнопки -->
-          <button type="submit" class="btn btn-outline-success">
-            <i class="fas fa-plus-square"></i> Update
-          </button>
-        </div>
-      </form>
+  <h2>Edit Todo Item</h2>
+  <form class="row g-3" action="#" th:action="@{/todo/{id}(id=${toDoItem.id})}" th:object="${toDoItem}" method="POST">
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input class="form-control" type="text" th:field="*{description}" id="description" placeholder="Enter the description" required>
     </div>
-  </div>
+    <div class="form-group">
+      <label for="deadline">Deadline</label>
+      <input class="form-control" type="date" th:field="*{deadline}" id="deadline" required>
+    </div>
+    <div class="form-group form-check">
+      <input class="form-check-input" type="checkbox" id="inputIsComplete" th:field="*{isCompleted}">
+      <label class="form-check-label" for="inputIsComplete">Completed?</label>
+    </div>
+    <input type="hidden" th:field="*{createdAt}" />
+    <button type="submit" class="btn" id="updateButton">
+      <i class="fas fa-plus-square"></i> Update
+    </button>
+  </form>
 </div>
-<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+
+<!-- Error Message -->
+<div class="error-message" id="deadlineError">
+  Deadline could not be in the past!
+</div>
+
+<script>
+  const deadlineInput = document.getElementById('deadline');
+  const submitButton = document.getElementById('updateButton');
+  const deadlineError = document.getElementById('deadlineError');
+
+  deadlineInput.addEventListener('input', function() {
+    const deadlineDate = new Date(this.value);
+    const now = new Date();
+
+    if (deadlineDate < now) {
+      submitButton.disabled = true; // Disable button
+      submitButton.classList.add('disabled'); // Add disabled class
+      deadlineError.style.display = 'block'; // Show error message
+    } else {
+      submitButton.disabled = false; // Enable button
+      submitButton.classList.remove('disabled'); // Remove disabled class
+      deadlineError.style.display = 'none'; // Hide error message
+    }
+  });
+</script>
 </body>
 </html>

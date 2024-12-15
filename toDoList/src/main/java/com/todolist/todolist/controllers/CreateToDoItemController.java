@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @RestController
@@ -59,6 +60,7 @@ public class CreateToDoItemController {
 
     @PostMapping("/todo")
     public ResponseEntity<?> createToDoItem(@Validated ToDoItem toDoItem, HttpServletRequest request){
+        HttpHeaders headers = new HttpHeaders();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         ToDoItem item = new ToDoItem();
@@ -68,7 +70,6 @@ public class CreateToDoItemController {
         item.setUserId(userRepository.findByEmail(username).orElseThrow().getId());
 
         toDoItemService.save(item);
-        HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/home"); // Укажите целевой URL
         return new ResponseEntity<>(headers, HttpStatus.FOUND); // 302 статус
     }
