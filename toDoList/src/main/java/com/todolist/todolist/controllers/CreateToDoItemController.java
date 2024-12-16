@@ -1,10 +1,8 @@
 package com.todolist.todolist.controllers;
 
 import com.todolist.todolist.models.ToDoItem;
-import com.todolist.todolist.models.User;
 import com.todolist.todolist.repositories.UserRepository;
 import com.todolist.todolist.services.ToDoItemService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.Instant;
-import java.time.LocalDate;
+
 import java.util.Objects;
 
 @RestController
@@ -52,14 +47,14 @@ public class CreateToDoItemController {
     }
 
     @GetMapping("/create-todo")
-    public ModelAndView showCreateForm(ToDoItem toDoItem){
+    public ModelAndView showCreateForm(){
         ModelAndView modelAndView = new ModelAndView("new-todo-item");
         modelAndView.addObject("toDoItem", new ToDoItem());
         return modelAndView;
     }
 
     @PostMapping("/todo")
-    public ResponseEntity<?> createToDoItem(@Validated ToDoItem toDoItem, HttpServletRequest request){
+    public ResponseEntity<?> createToDoItem(@Validated ToDoItem toDoItem){
         HttpHeaders headers = new HttpHeaders();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -75,7 +70,7 @@ public class CreateToDoItemController {
     }
 
     @GetMapping("/delete/{id}")
-    public ResponseEntity<?> deleteTodoItem(@PathVariable("id") Long id, Model model) {
+    public ResponseEntity<?> deleteTodoItem(@PathVariable("id") Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         if(!Objects.equals(userRepository.findByEmail(username).orElseThrow().getId(), toDoItemService.getToDoItemById(id).orElseThrow().getUserId())) {
@@ -92,7 +87,7 @@ public class CreateToDoItemController {
     }
 
     @GetMapping("/edit/{id}")
-    public ModelAndView showUpdateForm(@PathVariable("id") Long id, Model model) {
+    public ModelAndView showUpdateForm(@PathVariable("id") Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         if(!Objects.equals(userRepository.findByEmail(username).orElseThrow().getId(), toDoItemService.getToDoItemById(id).orElseThrow().getUserId())) {
@@ -108,7 +103,7 @@ public class CreateToDoItemController {
 
 
     @PostMapping("/todo/{id}")
-    public ResponseEntity<?> updateTodoItem(@PathVariable("id") Long id, @Validated ToDoItem todoItemTmp, BindingResult result, Model model) {
+    public ResponseEntity<?> updateTodoItem(@PathVariable("id") Long id, @Validated ToDoItem todoItemTmp) {
         ToDoItem toDoItem = toDoItemService
                 .getToDoItemById(id)
                 .orElseThrow(() -> new IllegalArgumentException("TodoItem id: " + id + " not found"));

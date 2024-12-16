@@ -49,7 +49,6 @@ public class SecurityConfig {
         return authenticationManagerBuilder;
     }
 
-    @Deprecated(since = "Need to work with csrf and cors")
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -60,9 +59,7 @@ public class SecurityConfig {
                                         new CorsConfiguration().applyPermitDefaultValues())
                 )
                 .exceptionHandling(exceptions ->
-                        exceptions.authenticationEntryPoint((request, response, authException) -> {
-                            response.sendRedirect("/auth/create_signin");
-                        })
+                        exceptions.authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/auth/create_signin"))
                 )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
