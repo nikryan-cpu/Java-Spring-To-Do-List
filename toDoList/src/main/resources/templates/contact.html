@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        :root {
+            --primary-color: #1e1e1e;
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --secondary-color: #c800ff;
+            --light-button-color: #000000;
+        }
+        .light-mode {
+            --primary-color: #ffffff;
+            --background-color: #f0f2f5;
+            --text-color: #212529;
+            --secondary-color: #007bff;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .box {
+            background-color: var(--primary-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            animation: popIn 0.5s forwards;
+        }
+        label {
+            margin-top: 15px; /* Space above the label */
+            margin-bottom: 5px; /* Space below the label */
+            display: block; /* Ensure labels are block elements */
+        }
+        input, textarea {
+            width: 100%;
+            max-width: 250px; /* Set a maximum width for input fields */
+            padding: 10px;
+            margin-top: 5px; /* Space above the input fields */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 15px; /* Increased space above the button */
+            width: 100%;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .toggle-dark-mode {
+            position: fixed;
+            top: 10px;
+            right: 0;
+            background-color: var(--primary-color);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            z-index: 10;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes popIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+<button class="toggle-dark-mode" onclick="toggleDarkMode()">
+    <i class="fas fa-sun" id="dark-mode-icon"></i>
+</button>
+<h1>Contact Us</h1>
+<div class="box">
+    <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        <label for="message">Message:</label>
+        <textarea id="message" rows="4" required></textarea>
+        <button type="submit">Send Message</button>
+    </form>
+</div>
+<div class="footer">
+    <p>&copy; 2024 Todo List App. All rights reserved.</p>
+</div>
+
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('light-mode');
+        const icon = document.getElementById('dark-mode-icon');
+        icon.classList.toggle('fa-sun');
+        icon.classList.toggle('fa-moon');
+    }
+</script>
+</body>
+</html>
