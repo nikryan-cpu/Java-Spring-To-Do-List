@@ -11,8 +11,8 @@
             --background-color: #121212;
             --text-color: #ffffff;
             --secondary-color: rgba(230, 42, 244, 0.47);
-            --success-color: rgba(230, 42, 244, 0.47); /* Green color for buttons */
-            --error-color: #6c757d; /* Gray color for button on error */
+            --success-color: rgba(230, 42, 244, 0.47);
+            --error-color: #6c757d;
         }
         body {
             background-color: var(--background-color);
@@ -94,11 +94,11 @@
             transition: background-color 0.3s ease;
         }
         button.disabled {
-            background-color: var(--error-color); /* Gray color on error */
-            cursor: not-allowed; /* Show not-allowed cursor */
+            background-color: var(--error-color);
+            cursor: not-allowed;
         }
         button:hover:not(.disabled) {
-            background-color: #212a88; /* Darker green on hover */
+            background-color: #212a88;
         }
         .error-message {
             position: fixed;
@@ -129,6 +129,7 @@
                    th:field="*{description}"
                    id="description"
                    placeholder="Enter the description"
+                   maxlength="255"
                    required>
         </div>
         <div class="form-group">
@@ -162,13 +163,13 @@
         const now = new Date();
 
         if (deadlineDate < now) {
-            submitButton.disabled = true; // Disable button
-            submitButton.classList.add('disabled'); // Add disabled class
-            deadlineError.style.display = 'block'; // Show error message
+            submitButton.disabled = true;
+            submitButton.classList.add('disabled');
+            deadlineError.style.display = 'block';
         } else {
-            submitButton.disabled = false; // Enable button
-            submitButton.classList.remove('disabled'); // Remove disabled class
-            deadlineError.style.display = 'none'; // Hide error message
+            submitButton.disabled = false;
+            submitButton.classList.remove('disabled');
+            deadlineError.style.display = 'none';
         }
     });
 </script>

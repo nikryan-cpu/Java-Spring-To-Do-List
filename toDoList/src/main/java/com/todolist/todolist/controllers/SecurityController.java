@@ -72,7 +72,7 @@ public class SecurityController {
         user.setUsername(signUpRequest.getUsername());
         userRepository.save(user);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/home");
+        headers.add("Location", "/auth/create_signin");
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
