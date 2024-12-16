@@ -19,6 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 import requests.SignInRequest;
 import requests.SignUpRequest;
 
+import java.util.Locale;
+import java.util.Objects;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -52,9 +55,14 @@ public class SecurityController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup (String email, String username, String password){
+    public ResponseEntity<?> signup (String email, String username, String password) {
         SignUpRequest signUpRequest = new SignUpRequest(email, username, password);
         System.out.println("Received signup request: " + signUpRequest);
+        if(Objects.equals(signUpRequest.getUsername().toLowerCase(Locale.ROOT), "freddy")){
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", "/images/Freddy.jpg"); // Укажите целевой URL
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        }
         if(userRepository.existsUserByUsername(signUpRequest.getUsername())){
             HttpHeaders headers = new HttpHeaders();
             headers.add("Location", "/auth/create_wrong_signup_username"); // Укажите целевой URL
